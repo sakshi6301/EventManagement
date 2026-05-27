@@ -37,7 +37,7 @@ import {
 } from '@mui/icons-material';
 import VendorLayout from '../../components/vendor/VendorLayout';
 import ImageUpload from '../../components/common/ImageUpload';
-import api from '../../utils/api';
+import api, { BACKEND_URL } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 
 const ProductCard = ({ product, onEdit, onDelete }) => {
@@ -63,7 +63,7 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
             product.images && product.images.length > 0
               ? product.images[currentImageIndex].startsWith('http')
                 ? product.images[currentImageIndex]
-                : `http://localhost:5001${product.images[currentImageIndex]}`
+                : `${BACKEND_URL}${product.images[currentImageIndex]}`
               : 'https://via.placeholder.com/400x300?text=No+Image'
           }
           alt={product.name}

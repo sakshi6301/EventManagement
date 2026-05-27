@@ -13,7 +13,7 @@ import {
   Star, StarBorder, Favorite, FavoriteBorder, VerifiedUser,
   Sort, ArrowUpward, ArrowDownward
 } from '@mui/icons-material';
-import api from '../utils/api';
+import api, { BACKEND_URL, UPLOADS_URL } from '../utils/api';
 import { useQuery } from '@tanstack/react-query';
 
 // Mock data as fallback
@@ -189,19 +189,19 @@ const VendorList = () => {
       
       // If it's a relative path starting with /uploads/, construct the full URL
       if (cleanPath.startsWith('/uploads/')) {
-        const fullUrl = `http://localhost:5001${cleanPath}`;
+        const fullUrl = `${BACKEND_URL}${cleanPath}`;
         console.log('Constructed full URL:', fullUrl);
         return fullUrl;
       }
       
       // Otherwise, assume it's just a filename and construct the full URL
-      const fullUrl = `http://localhost:5001/uploads/${cleanPath}`;
+      const fullUrl = `${UPLOADS_URL}/${cleanPath}`;
       console.log('Constructed full URL from filename:', fullUrl);
       return fullUrl;
     }
     
     // If no profile image, use the default Logo.jpg
-    return 'http://localhost:5001/uploads/Logo.jpg';
+    return `${UPLOADS_URL}/Logo.jpg`;
   };
 
   if (vendorsError) {
@@ -557,7 +557,7 @@ const VendorList = () => {
                           <CardMedia
                             component="img"
                             height="220"
-                            image={vendor.profileImage ? `http://localhost:5001${vendor.profileImage}` : 'http://localhost:5001/uploads/Logo.jpg'}
+                            image={vendor.profileImage ? `${BACKEND_URL}${vendor.profileImage}` : `${UPLOADS_URL}/Logo.jpg`}
                             alt={vendor.name || 'Vendor Image'}
                             sx={{ 
                               transition: 'transform 0.5s ease',
