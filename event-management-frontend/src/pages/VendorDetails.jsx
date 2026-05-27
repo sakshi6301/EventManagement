@@ -603,9 +603,9 @@ const VendorDetails = () => {
               </Button>
             </DialogActions>
           </Dialog>
+          </Container>
         </>
       )}
-    </Container>
     </Box>
   );
 };
