@@ -13,6 +13,7 @@ import {
   Star, StarBorder, Favorite, FavoriteBorder, VerifiedUser,
   Sort, ArrowUpward, ArrowDownward
 } from '@mui/icons-material';
+import { motion } from 'framer-motion';
 import api, { BACKEND_URL, UPLOADS_URL } from '../utils/api';
 import { useQuery } from '@tanstack/react-query';
 
@@ -218,8 +219,8 @@ const VendorList = () => {
       <Box 
         sx={{ 
           width: '100%', 
-          height: '400px', 
-          background: 'linear-gradient(135deg, #660095 0%, #800080 25%, #c837ab 50%, #ff69b4 75%, #ffb6c1 100%)',
+          height: '450px', 
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -235,12 +236,13 @@ const VendorList = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundImage: 'url(https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
             opacity: 0.3,
-            zIndex: -1,
+            mixBlendMode: 'overlay',
+            zIndex: 0,
           }
         }}
       >
@@ -534,26 +536,34 @@ const VendorList = () => {
               </Grid>
             ) : (
               <Grid container spacing={3}>
-                {sortedVendors.map((vendor) => (
+                {sortedVendors.map((vendor, index) => (
                   <Grid item xs={12} sm={6} lg={4} key={vendor._id}>
-                    <Zoom in={true} style={{ transitionDelay: '100ms' }}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      style={{ height: '100%' }}
+                    >
                       <Card 
                         elevation={0}
                         sx={{ 
                           height: '100%',
                           display: 'flex',
                           flexDirection: 'column',
-                          borderRadius: 2,
+                          borderRadius: 4,
                           overflow: 'hidden',
-                          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                          boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05)',
+                          border: '1px solid rgba(255,255,255,0.8)',
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          backdropFilter: 'blur(10px)',
                           transition: 'all 0.3s ease',
                           '&:hover': {
                             transform: 'translateY(-8px)',
-                            boxShadow: '0 12px 20px rgba(0,0,0,0.12)'
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
                           }
                         }}
                       >
-                        <Box sx={{ position: 'relative' }}>
+                        <Box sx={{ position: 'relative', overflow: 'hidden' }}>
                           <CardMedia
                             component="img"
                             height="220"
@@ -662,7 +672,7 @@ const VendorList = () => {
                           </Box>
                         </CardContent>
                       </Card>
-                    </Zoom>
+                    </motion.div>
                   </Grid>
                 ))}
                 

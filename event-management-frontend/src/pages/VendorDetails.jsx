@@ -41,6 +41,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import EventIcon from '@mui/icons-material/Event';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import { motion, AnimatePresence } from 'framer-motion';
 import api, { BACKEND_URL } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -256,52 +257,79 @@ const VendorDetails = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ width: '100%', minHeight: '100vh', pb: 8, bgcolor: 'background.default' }}>
       {vendor && (
         <>
-          <Card sx={{ mb: 4 }}>
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
-                  {vendor.images && vendor.images[0] && (
-                    <CardMedia
-                      component="img"
-                      height="300"
-                      image={getImageUrl(vendor.images[0])}
-                      alt={vendor.name}
-                      sx={{ objectFit: 'cover', cursor: 'pointer', borderRadius: 1 }}
-                      onClick={() => handleImageClick(getImageUrl(vendor.images[0]))}
-                    />
-                  )}
-                </Grid>
-                <Grid item xs={12} md={8}>
-                  <Typography variant="h4" gutterBottom>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Box 
+              sx={{
+                width: '100%',
+                height: '50vh',
+                minHeight: '400px',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'flex-end',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0, left: 0, right: 0, bottom: 0,
+                  backgroundImage: vendor.images && vendor.images[0] ? `url(${getImageUrl(vendor.images[0])})` : `url(${UPLOADS_URL}/Logo.jpg)`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  zIndex: 0,
+                },
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0, left: 0, right: 0, bottom: 0,
+                  background: 'linear-gradient(to top, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.4) 50%, rgba(15,23,42,0.1) 100%)',
+                  zIndex: 1,
+                }
+              }}
+            >
+              <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, pb: 6 }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <Typography variant="h2" sx={{ color: '#fff', fontWeight: 800, mb: 1, textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
                     {vendor.name}
                   </Typography>
-                  <Rating value={vendor.rating || 0} readOnly precision={0.5} />
-                  <Typography color="text.secondary" sx={{ mt: 1 }}>
-                    ({vendor.reviews?.length || 0} reviews)
-                  </Typography>
-                  <Typography variant="body1" sx={{ mt: 2 }}>
-                    {vendor.description}
-                  </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    <Stack direction="row" spacing={2}>
-                      {vendor.location && (
-                        <Chip icon={<LocationOnIcon />} label={vendor.location} />
-                      )}
-                      {vendor.phone && (
-                        <Chip icon={<PhoneIcon />} label={vendor.phone} />
-                      )}
-                      {vendor.email && (
-                        <Chip icon={<EmailIcon />} label={vendor.email} />
-                      )}
-                    </Stack>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+                    <Rating value={vendor.rating || 0} readOnly precision={0.5} sx={{ color: '#FFD700' }} />
+                    <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>
+                      ({vendor.reviews?.length || 0} reviews)
+                    </Typography>
                   </Box>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+                  <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2 }}>
+                    {vendor.location && (
+                      <Chip icon={<LocationOnIcon />} label={vendor.location} sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: '#fff', backdropFilter: 'blur(10px)' }} />
+                    )}
+                    {vendor.phone && (
+                      <Chip icon={<PhoneIcon />} label={vendor.phone} sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: '#fff', backdropFilter: 'blur(10px)' }} />
+                    )}
+                    {vendor.email && (
+                      <Chip icon={<EmailIcon />} label={vendor.email} sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: '#fff', backdropFilter: 'blur(10px)' }} />
+                    )}
+                  </Stack>
+                </motion.div>
+              </Container>
+            </Box>
+          </motion.div>
+          <Container maxWidth="lg" sx={{ mt: -4, position: 'relative', zIndex: 3 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
+              <Card elevation={0} sx={{ p: 3, mb: 4, borderRadius: 4, boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}>
+                <Typography variant="h6" gutterBottom fontWeight={700}>About {vendor.name}</Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8 }}>
+                  {vendor.description}
+                </Typography>
+              </Card>
+            </motion.div>
 
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
             <Tabs value={selectedTab} onChange={handleTabChange}>
@@ -578,6 +606,7 @@ const VendorDetails = () => {
         </>
       )}
     </Container>
+    </Box>
   );
 };
 
